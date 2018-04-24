@@ -51,6 +51,10 @@
 
 @implementation CJSegmentedControl
 
+-(instancetype)initWithFrame:(CGRect)frame {
+    return [self initWithFrame:frame titles:nil];
+}
+
 -(instancetype)initWithFrame:(CGRect)frame titles:(NSArray<NSString *> *)titles{
     self = [super initWithFrame:frame];
     if (!self) return nil;
@@ -97,7 +101,7 @@
     _separateEnable     = NO;
     _indicatorEnable    = YES;
     _indicatorHeight    = 2.0f;
-    self.backgroundColor = [UIColor purpleColor];
+    self.backgroundColor = _segmentSelectedColor;
     
 }
 
@@ -115,9 +119,9 @@
         CGRect btnFrame = CGRectZero;
         if (_indicatorEnable) {
             if (_indicatorPosition == CJSegmentedIndicatorPositionBottom) {
-                btnFrame = CGRectMake(i * _contentWidth , 0 , _contentWidth, CGRectGetHeight(self.frame) - _indicatorHeight);
+                btnFrame = CGRectMake(i * _contentWidth , 0 , _contentWidth, CGRectGetHeight(self.frame));
             }else if (_indicatorPosition == CJSegmentedIndicatorPositionTop) {
-                btnFrame = CGRectMake(i * _contentWidth , _indicatorHeight , _contentWidth, CGRectGetHeight(self.frame) - _indicatorHeight);
+                btnFrame = CGRectMake(i * _contentWidth , _indicatorHeight , _contentWidth, CGRectGetHeight(self.frame));
             }
         }else {
             btnFrame = CGRectMake(i * _contentWidth , 0 , _contentWidth, CGRectGetHeight(self.frame));
@@ -190,7 +194,7 @@
 -(void)handleIndicatorFrameDependentButton:(_CJButton *)button {
     if (_indicatorStyle == CJSegmentedIndicatorStyleFix) {
         if (_indicatorPosition == CJSegmentedIndicatorPositionBottom) {
-            _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.frame), CGRectGetMaxY(button.frame), _contentWidth, _indicatorHeight);
+            _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.frame), CGRectGetMaxY(button.frame)-_indicatorHeight, _contentWidth, _indicatorHeight);
             
         }else if (_indicatorPosition == CJSegmentedIndicatorPositionTop) {
             _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.frame), 0, _contentWidth, _indicatorHeight);
@@ -203,7 +207,7 @@
         _segmentedContentType == CJSegmentedControlContentTypeTextAndImage) {
         
         if (_indicatorPosition == CJSegmentedIndicatorPositionBottom) {
-            _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.titleLabel.frame) + CGRectGetMinX(button.frame), CGRectGetMaxY(button.frame), CGRectGetWidth(button.titleLabel.frame), _indicatorHeight);
+            _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.titleLabel.frame) + CGRectGetMinX(button.frame), CGRectGetMaxY(button.frame)-_indicatorHeight, CGRectGetWidth(button.titleLabel.frame), _indicatorHeight);
             
         }else if (_indicatorPosition == CJSegmentedIndicatorPositionTop) {
             _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.titleLabel.frame) + CGRectGetMinX(button.frame), 0, CGRectGetWidth(button.titleLabel.frame), _indicatorHeight);
@@ -213,7 +217,7 @@
     }else if (_segmentedContentType == CJSegmentedControlContentTypeImage) {
         
         if (_indicatorPosition == CJSegmentedIndicatorPositionBottom) {
-            _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.imageView.frame) + CGRectGetMinX(button.frame), CGRectGetMaxY(button.frame), CGRectGetWidth(button.imageView.frame), _indicatorHeight);
+            _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.imageView.frame) + CGRectGetMinX(button.frame), CGRectGetMaxY(button.frame)-_indicatorHeight, CGRectGetWidth(button.imageView.frame), _indicatorHeight);
             
         }else if (_indicatorPosition == CJSegmentedIndicatorPositionTop) {
             _indicatorV.frame   = CGRectMake(CGRectGetMinX(button.imageView.frame) + CGRectGetMinX(button.frame), 0, CGRectGetWidth(button.imageView.frame), _indicatorHeight);
@@ -224,6 +228,10 @@
    
 }
 
+-(void)setSegmentSelectedColor:(UIColor *)segmentSelectedColor {
+    _segmentSelectedColor = segmentSelectedColor;
+    self.backgroundColor = segmentSelectedColor;
+}
 
 
 #pragma mark --- lazy
